@@ -3,11 +3,13 @@ public:
     int numIdenticalPairs(vector<int>& nums) {
         int n = nums.size();
         
-        vector<int> temp(101);
-        
         int c=0;
-        for(int i=0;i<n;i++){
-            c+=temp[nums[i]]++;
+        
+        for(int i=0;i<n-1;i++){
+            for(int j=i+1;j<n;j++){
+                if(nums[i]==nums[j])
+                    c++;
+            }
         }
         
         return c;
