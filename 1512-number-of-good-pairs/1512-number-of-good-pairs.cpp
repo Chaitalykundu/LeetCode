@@ -16,3 +16,10 @@ public:
         return c;
     }
 };
+
+
+/*
+
+    T.C = O(n(log(n)))
+
+*/
