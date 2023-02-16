@@ -1,3 +1,6 @@
+Using recursion
+
+```
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
@@ -5,3 +8,4 @@ public:
         return 1 + max(maxDepth(root->left), maxDepth(root->right));
     }
 };
+```
