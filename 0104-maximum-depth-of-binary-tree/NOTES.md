@@ -1,4 +1,4 @@
-Using recursion
+Using recursion and max
 
 ```
 class Solution {
