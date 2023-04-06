@@ -18,15 +18,10 @@ class Solution{
         
         priority_queue <int> maxHeap;
         
-        for(int i=0;i<k;i++){
+        for(int i=l; i<=r; i++) {
             maxHeap.push(arr[i]);
-        }
-        
-        for(int i=k;i<r+1;i++){
-            if(arr[i]<maxHeap.top()){
+            if(maxHeap.size() > k) 
                 maxHeap.pop();
-                maxHeap.push(arr[i]);
-            }
         }
         return maxHeap.top();
     }
