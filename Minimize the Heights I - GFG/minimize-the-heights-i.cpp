@@ -13,21 +13,18 @@ public:
         // code here
         
         sort(arr,arr+n);
+        int diff = arr[n-1] - arr[0];
         
-        int diff = arr[n-1]-arr[0];
+        int smallest = arr[0]+k;
+        int largest = arr[n-1]-k;
         
-        int smallest = arr[0] + k;
-        int largest = arr[n-1] - k;
-        
-        int mini = 0, maxi =0;
+        int mini, maxi;
         for(int i=0;i<n-1;i++){
-            mini = min(smallest,arr[i+1]-k);
+            mini = min(smallest, arr[i+1]-k);
             maxi = max(largest, arr[i]+k);
-            
             
             diff = min(diff,maxi-mini);
         }
-        
         return diff;
     }
 };
