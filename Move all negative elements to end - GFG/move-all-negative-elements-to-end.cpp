@@ -12,18 +12,16 @@ class Solution{
         
         for(int i=0;i<n;i++){
             if(arr[i]>=0)
-                temp[j++]=arr[i];
+                temp[j++] = arr[i];
         }
         
         for(int i=0;i<n;i++){
             if(arr[i]<0)
-                temp[j++]=arr[i];
+                temp[j++] = arr[i];
         }
-        
         for(int i=0;i<n;i++){
-            arr[i] = temp[i];
+                arr[i]= temp[i];
         }
-        
     }
 };
 
