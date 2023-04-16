@@ -13,17 +13,23 @@ class Solution{
     int doUnion(int a[], int n, int b[], int m)  {
         //code here
         
-        set<int> s;
+        int temp[n+m];
         
-        for(int i=0;i<n;i++){
-            s.insert(a[i]);
+        for(int i=0;i<n;i++)
+            temp[i] = a[i];
+        
+        for(int i=0;i<m;i++)
+            temp[n+i] = b[i];
+            
+        sort(temp, temp+n+m);
+        
+        int c=1;
+        for(int i=0;i<n+m-1;i++){
+            if(temp[i]!=temp[i+1])
+                c++;
+            
         }
-        
-        for(int i=0;i<m;i++){
-            s.insert(b[i]);
-        }
-        
-        return s.size();
+        return c;   
     }
 };
 
