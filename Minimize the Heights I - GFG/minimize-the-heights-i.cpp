@@ -13,6 +13,7 @@ public:
         // code here
         
         sort(arr,arr+n);
+        
         int diff = arr[n-1] - arr[0];
         
         int smallest = arr[0]+k;
@@ -23,7 +24,7 @@ public:
             mini = min(smallest, arr[i+1]-k);
             maxi = max(largest, arr[i]+k);
             
-            diff = min(diff,maxi-mini);
+            diff = min(diff, maxi-mini);
         }
         return diff;
     }
