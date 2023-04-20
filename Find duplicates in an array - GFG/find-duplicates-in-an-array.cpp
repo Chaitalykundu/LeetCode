@@ -9,20 +9,20 @@ class Solution{
         // code here
         
         sort(arr,arr+n);
-        
+    
         vector<int> v;
         
-        int c=1, count=0;
+        int c=0, count=0;
         for(int i=0;i<n-1;i++){
             if(arr[i]==arr[i+1])
             {
                 c++;
                 count++;
-                if(c==2)
+                if(c==1)
                     v.push_back(arr[i]);
             }
             else
-                c=1;
+                c=0;
         }
         if(count==0)
             v.push_back(-1);
