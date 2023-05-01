@@ -5,6 +5,8 @@ public:
         int n = salary.size();
         
         int min=salary[0], max=salary[0];
+        double sum = 0;
+
         
         for(int i=0;i<n;i++)
         {
@@ -12,18 +14,12 @@ public:
                 min = salary[i];
             if(max<salary[i])
                 max = salary[i];
+            sum+=salary[i];
         } 
         
-        double sum = 0;
-        for(int i=0;i<n;i++){
-            if(salary[i]==min || salary[i]==max)
-                continue;
-            sum+=salary[i];
-            
-        }
+        sum = sum - min - max;
                         
-        double avg = sum/(n-2);
-        return avg;
+        return sum/(n-2);
     }
     
 };
