@@ -1,32 +1,20 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-#define ll long long
 class Solution {
 public:
 
-    void dfs(TreeNode *root, ll &ans , ll tmp){
-        if(root->left== NULL && root->right==NULL){
-            tmp = tmp*10 + root->val;
-            ans+=tmp;
-            return;
-        }
-        tmp = tmp*10 + root->val;
-        if(root->left) dfs(root->left,ans,tmp);
-        if(root->right) dfs(root->right,ans,tmp);
-    }
+    void inorder(TreeNode* root, long  num, long & sum){
+        if(!root) return;
 
+        num+=root->val;
+        if(!root->left && !root->right)sum+=num;
+
+        inorder(root->left,num*10,sum);
+        inorder(root->right,num*10,sum);
+    }
     int sumNumbers(TreeNode* root) {
-        ll ans =0;
-        dfs(root,ans,0);
-        return int(ans);
+        ios_base::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
+
+        long num=0,sum=0;
+        inorder(root,num,sum);
+        return sum;
     }
 };
