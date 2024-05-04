@@ -1,27 +1,33 @@
+#pragma GCC optimize("O3", "unroll-loops")
 class Solution {
 public:
     int numRescueBoats(vector<int>& people, int limit) {
-        sort(people.begin(),people.end());
-        
-        int i = 0, j = people.size() - 1,cnt = 0;
-        
-        while(i <= j)
-        {   
-            // lightest person + heaviest person sum <= limit
-            // they can go together
-            if(people[i] + people[j] <= limit)
-            {
-                ++i;
-                --j;
-            }
-            // if sum is over the limit,
-            // heaviest will go alone.
-            else
-                --j;
-            
-            ++cnt;  // number of boats
+        unsigned freq[30001]={0};
+        int maxW=0, minW=30001;
+        for(int x: people){
+            freq[x]++;
+            maxW=max(maxW, x);
+            minW=min(minW, x);
         }
-        
-        return cnt;
+        for (int i=minW, j=0; i<=maxW; i++){
+            int f=freq[i];
+            fill(people.begin()+j, people.begin()+j+f, i);
+            j+=f;
+        }      
+        int x=0;
+        for(int l=0, r=people.size()-1;l<=r; r--){
+            x++;
+            if (people[l]+people[r]<=limit)
+                l++;          
+        }
+        return x;
     }
 };
+
+
+auto init = []() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    return 'c';
+}();
