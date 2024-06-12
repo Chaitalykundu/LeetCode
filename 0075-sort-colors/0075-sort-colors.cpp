@@ -1,26 +1,14 @@
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
-        int n = nums.size();
-        
-        int l=0,h=n-1,mid=0;
-        
-        while(mid<=h){
-            switch(nums[mid]){
-                case 0:
-                    swap(nums[l],nums[mid]);
-                    l++;
-                    mid++;
-                    break;
-                case 1:
-                    mid++;
-                    break;
-                case 2:
-                    swap(nums[mid],nums[h]);
-                    h--;
-                    break;
-            }
-            
+        int freq[3]={0};
+        for(int x: nums)
+            freq[x]++;
+        int n=nums.size(), count=0;
+        for(int x=0; x<3; x++){
+            fill(nums.begin()+count, nums.begin()+count+freq[x], x);
+            count+=freq[x];
         }
+        
     }
 };
