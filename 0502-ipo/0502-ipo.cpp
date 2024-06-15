@@ -1,31 +1,40 @@
 class Solution {
 public:
-    int findMaximizedCapital(int k, int w, vector<int>& profits, vector<int>& capital) {
-        // Sort projects in order of capital (least capital -> most capital)
-        vector<pair<int, int>> projects(profits.size());
-        for (size_t i = 0; i < profits.size(); i++) {
-            projects[i] = {capital[i], profits[i]};
-        }
-        sort(projects.begin(), projects.end());
+    int findMaximizedCapital(int k, int w, vector<int>& profits,
+                             vector<int>& capital) {
+        int n = profits.size();
+        std::vector<std::pair<int, int>> projects;
 
-        // Keep track of highest profit project in priority queue
-        priority_queue<int> best_profit;
-        for (const auto& [cost, profit]: projects) {
-            // If we can't afford this project, take highest profit until we can
-            while (!best_profit.empty() && w < cost && k--) {
-                w += best_profit.top(); best_profit.pop();
+        // Creating vector of pairs (capital, profits)
+        for (int i = 0; i < n; ++i) {
+            projects.emplace_back(capital[i], profits[i]);
+        }
+
+        // Sorting projects by capital required
+        std::sort(projects.begin(), projects.end());
+
+        // Max-heap to store profits, using greater to create a max-heap
+        std::priority_queue<int> maxHeap;
+        int i = 0;
+
+        // Main loop to select up to k projects
+        for (int j = 0; j < k; ++j) {
+            // Add all profitable projects that we can afford
+            while (i < n && projects[i].first <= w) {
+                maxHeap.push(projects[i].second);
+                i++;
             }
-            // No more projects can be conducted - return current capital
-            if (!k || w < cost) return w;
-            // Add project to priority queue
-            best_profit.push(profit);
+
+            // If no projects can be funded, break out of the loop
+            if (maxHeap.empty()) {
+                break;
+            }
+
+            // Otherwise, take the project with the maximum profit
+            w += maxHeap.top();
+            maxHeap.pop();
         }
 
-        // All remaining projects are affordable - add the best ones
-        while (k-- && !best_profit.empty()) {
-            w += best_profit.top();
-            best_profit.pop();
-        }
-        return w; 
+        return w;
     }
 };
