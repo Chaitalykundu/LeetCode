@@ -1,69 +1,68 @@
-class UnionFind {
-    vector<int> representative;
-    vector<int> componentSize;
-    int components;
-    
-public:
-    UnionFind(int n) {
-        components = n;
-        for (int i = 0; i <= n; i++) {
-            representative.push_back(i);
-            componentSize.push_back(1);
-        }
-    }
-    
-    int findRepresentative(int x) {
-        if (representative[x] == x) {
-            return x;
-        }
-        return representative[x] = findRepresentative(representative[x]);
-    }
-    
-    int performUnion(int x, int y) {       
-        x = findRepresentative(x); y = findRepresentative(y);
-        
-        if (x == y) {
-            return 0;
-        }
-        
-        if (componentSize[x] > componentSize[y]) {
-            componentSize[x] += componentSize[y];
-            representative[y] = x;
-        } else {
-            componentSize[y] += componentSize[x];
-            representative[x] = y;
-        }
-        
-        components--;
-        return 1;
-    }
-
-    bool isConnected() {
-        return components == 1;
-    }
-};
-
 class Solution {
 public:
     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
-        UnionFind Alice(n), Bob(n);
+        class UnionFind {
+        public:
+            vector<int> parent, size;
+            int components;
+            UnionFind(int n) {
+                components = n;
+                parent.resize(n + 1);
+                size.resize(n + 1, 1);
+                for (int i = 0; i <= n; ++i) {
+                    parent[i] = i;
+                }
+            }
 
+            int find(int x) {
+                if (parent[x] != x) {
+                    parent[x] = find(parent[x]);
+                }
+                return parent[x];
+            }
+
+            bool unite(int x, int y) {
+                int rootX = find(x), rootY = find(y);
+                if (rootX == rootY) return false;
+                if (size[rootX] < size[rootY]) swap(rootX, rootY);
+                parent[rootY] = rootX;
+                size[rootX] += size[rootY];
+                components--;
+                return true;
+            }
+
+            bool isConnected() {
+                return components == 1;
+            }
+        };
+        
+        UnionFind alice(n), bob(n);
         int edgesRequired = 0;
-        for (vector<int>& edge : edges) {
+        
+        // Process type 3 edges first
+        for (const auto& edge : edges) {
             if (edge[0] == 3) {
-                edgesRequired += (Alice.performUnion(edge[1], edge[2]) | Bob.performUnion(edge[1], edge[2]));
+                if (alice.unite(edge[1], edge[2]) | bob.unite(edge[1], edge[2])) {
+                    edgesRequired++;
+                }
             }
         }
-
-        for (vector<int>& edge : edges) {
+        
+        // Process type 1 and type 2 edges
+        for (const auto& edge : edges) {
             if (edge[0] == 1) {
-                edgesRequired += Alice.performUnion(edge[1], edge[2]);
+                if (alice.unite(edge[1], edge[2])) {
+                    edgesRequired++;
+                }
             } else if (edge[0] == 2) {
-                edgesRequired += Bob.performUnion(edge[1], edge[2]);
+                if (bob.unite(edge[1], edge[2])) {
+                    edgesRequired++;
+                }
             }
         }
-
-        if (Alice.isConnected() && Bob.isConnected()) {
+        
+        // Check if both are fully connected
+        if (alice.isConnected() && bob.isConnected()) {
             return edges.size() - edgesRequired;
         }
         
