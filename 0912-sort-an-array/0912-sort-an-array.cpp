@@ -1,81 +1,47 @@
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
-        int n = nums.size();
-        mergeSort(nums, n);
-        return nums;
+        vector<int> ans;
+        mergesort(nums,0,nums.size()-1);
+        for(int i=0;i<nums.size();i++){
+            ans.push_back(nums[i]);
+        }
+        return ans;
     }
-
-    //helper function
-    void mergeSort(vector<int> &A, int n)
-    {
-        //if the size of array is less than two, it means it contains only a single element so there is no need of sorting -> simply return
-        if (n < 2)
+    void mergesort(vector<int> &arr,int lb,int ub){
+        if(lb >= ub){
             return;
-        //calculate the middle position
-        int mid = n / 2;
-
-        //initialize two array left and right to store the two parts of array
-        vector<int> L;
-        vector<int> R;
-
-        for (int i = 0; i < n; i++)
-        {
-        //if the value of pointer is less than middle position push the element in left subarray
-            if (i < mid)
-            {
-                L.push_back(A[i]);
-            }
-        //else push the element in right subarray
-            else
-                R.push_back(A[i]);
         }
-
-        //sort both left and right subarray individually
-        mergeSort(L, L.size());
-        mergeSort(R, R.size());
-
-        //merge left and right subarray after sorting them
-        mergeArrays(A, L, R);
+        int mid = (lb + ub)/2;
+        mergesort(arr,lb,mid);
+        mergesort(arr,mid+1,ub);
+        merge(arr,lb,mid,ub);
     }
+    void merge(vector<int> &arr,int lb,int mid,int ub){
+        vector<int> temp;
+        int left = lb;
+        int right = mid+1;
 
-    void mergeArrays(vector<int> &A, vector<int> &L, vector<int> &R)
-    {
-
-        int sizeL = L.size();
-        int sizeR = R.size();
-        //initialize pointers for each array -> left, right and final
-        int i = 0, j = 0, k = 0;
-
-        while (i < sizeL && j < sizeR)
-        {
-            //if element at position i of left array is less than or equal to element at position j of right -> update the position k of final array with left[i]
-            if (L[i] <= R[j])
-            {
-                A[k] = L[i];
-                i++;
+        while(left <= mid && right <= ub){
+            if (arr[left] <= arr[right]) {
+                temp.push_back(arr[left]);
+                left++;
             }
-            //similarlly is element of right is less than element of left -> update the position of final array with element of right
-            else
-            {
-                A[k] = R[j];
-                j++;
+            else {
+                temp.push_back(arr[right]);
+                right++;
             }
-            k++;
         }
-
-        //if still there are remaining element in an array , simply append them into the final array
-        while (i < sizeL)
-        {
-            A[k] = L[i];
-            i++;
-            k++;
+        while (left <= mid) {
+            temp.push_back(arr[left]);
+            left++;
         }
-        while (j < sizeR)
-        {
-            A[k] = R[j];
-            j++;
-            k++;
+        while (right <= ub) {
+            temp.push_back(arr[right]);
+            right++;
+        }
+        for (int i = lb; i <= ub; i++) {
+            arr[i] = temp[i - lb];
         }
     }
 };
