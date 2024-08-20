@@ -1,41 +1,28 @@
 class Solution {
 public:
+    int N;
+    int solve(vector<int>& p, int idx, int M, int turn, vector<vector<vector<int>>> &dp)
+    {
+        if(N <= idx) return 0;
+        if(dp[idx][M][turn] != -1) return dp[idx][M][turn];
 
-        int dp[101][201];
+        int ans = turn ? INT_MIN : INT_MAX, sum = 0;
+        for(int jdx = idx ; jdx < N && jdx < idx + 2*M; jdx++)
+        {
+            sum += p[jdx];
+            if(turn)
+            {
+                ans = max(ans, solve(p, jdx+1, min(N, max(M, jdx-idx+1)), !turn, dp) + sum);
+            }else {
+                ans = min(ans, solve(p, jdx+1, min(N, max(M, jdx-idx+1)), !turn, dp));
+            }
+        }
 
-    int helper(int i,int m,vector<int>& piles){
-
-         if(i >= piles.size())
-         return 0;
-
-         if(dp[i][m] != -1)
-         return dp[i][m];
-
-         int total = 0;
-         int ans = INT_MIN;
-
-         for(int j=0;j<2*m;j++){
-
-             if(i+j < piles.size())
-              total += piles[i+j];
-
-              ans = max(ans,total - helper(i+j+1,max(m,j+1),piles));  
-         }
-
-        return dp[i][m] = ans;
+        return dp[idx][M][turn] = ans;
     }
-    int stoneGameII(vector<int>& piles) {
-
-
-        memset(dp,-1,sizeof dp);
-        
-        int sum = 0;
-        for(auto x:piles)
-         sum += x;
-
-        
-         int diff = helper(0,1,piles);
-        
-        return (sum+diff)/2;
+    int stoneGameII(vector<int>& p) {
+        N = p.size();
+        vector<vector<vector<int>>> dp(N+1, vector<vector<int>> (N+1, vector<int> (2, -1)));
+        return solve(p, 0, 1, 1, dp);
     }
 };
